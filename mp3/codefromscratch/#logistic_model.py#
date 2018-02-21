@@ -1,0 +1,211 @@
+"""logistic model class for binary classification."""
+
+import numpy as np
+
+class LogisticModel(object):
+
+    def __init__(self, ndims, W_init='zeros'):
+        """Initialize a logistic model.
+
+        This function prepares an initialized logistic model.
+        It will initialize the weight vector, self.W, based on the method
+        specified in W_init.
+
+        We assume that the FIRST index of W is the bias term,
+            self.W = [Bias, W1, W2, W3, ...]
+            where Wi correspnds to each feature dimension
+
+        W_init needs to support:
+          'zeros': initialize self.W with all zeros.
+          'ones': initialze self.W with all ones.
+          'uniform': initialize self.W with uniform random number between [0,1)
+          'gaussian': initialize self.W with gaussion distribution (0, 0.1)
+
+        Args:
+            ndims(int): feature dimension
+            W_init(str): types of initialization.
+        """
+        self.ndims = ndims
+        self.W_init = W_init
+        self.W = None
+        ###############################################################
+        # Fill your code below
+        ###############################################################
+        if W_init == 'zeros':
+            self.W = np.zeros((self.ndims,))
+        elif W_init == 'ones':
+            self.W = np.ones((self.ndims,))
+        elif W_init == 'uniform':
+            self.W = np.random.uniform(0,1,(self.ndims,))
+        elif W_init == 'gaussian':
+            self.W = np.random.normal(0,1,(self.ndims,))
+        else:
+            print ('Unknown W_init ', W_init)
+
+    def save_model(self, weight_file):
+        """ Save well-trained weight into a binary file.
+        Args:
+            weight_file(str): binary file to save into.
+        """
+        self.W.astype('float32').tofile(weight_file)
+        print ('model saved to', weight_file)
+
+
+    def load_model(self, weight_file):
+        """ Load pretrained weghit from a binary file.
+        Args:
+            weight_file(str): binary file to load from.
+        """
+        self.W = np.fromfile(weight_file, dtype=np.float32)
+        print ('model loaded from', weight_file)
+
+    def forward(self, X):
+        """ Forward operation for logistic models.
+            Performs the forward operation, and return probability score (sigmoid).
+        Args:
+            X(numpy.ndarray): input dataset with a dimension of (# of samples, ndims+1)
+        Returns:
+            (numpy.ndarray): probability score of (label == +1) for each sample
+                             with a dimension of (# of samples,)
+        """
+        ###############################################################
+        # Fill your code in this function
+        ###############################################################
+
+        linear = np.matmul(X,self.W)
+        return 1/(1+np.exp(-linear))
+
+
+    def backward(self, Y_true, X):
+        """ Backward operation for logistic models.
+            Compute gradient according to the probability loss on lecture slides
+        Args:
+            X(numpy.ndarray): input dataset with a dimension of (# of samples, ndims+1)
+            Y_true(numpy.ndarray): dataset labels with a dimension of (# of samples,)
+        Returns:
+            (numpy.ndarray): gradients of self.W
+        """
+        ###############################################################
+        # Fill your code in this function
+        ###############################################################
+        Y_true = np.reshape(Y_true,(Y_true.shape[0],1))
+
+        #G = self.forward(X)
+        #G = np.reshape(G,(G.shape[0],1))
+        #return np.matmul(np.transpose(X),((G-Y_true)*G*(1-G)))
+        grad = np.zeros((self.W.shape[0],))
+
+        for i in range(Y_true.shape[0]):
+            l = np.matmul(X[i],self.W)
+            grad = grad + (-Y_true[i]*np.exp(-Y_true[i]*l)/(1+np.exp(-Y_true[i]*l)))*X[i]
+        #print(grad.shape)
+        return grad
+
+
+    def classify(self, X):
+        """ Performs binary classification on input dataset.
+        Args:
+            X(numpy.ndarray): input dataset with a dimension of (# of samples, ndims+1)
+        Returns:
+            (numpy.ndarray): predicted label = +1/-1 for each sample
+                             with a dimension of (# of samples,)
+        """
+        ###############################################################
+        # Fill your code in this function
+        ###############################################################
+        crit_val = 0.5
+        f = self.forward(X)
+        p = []
+        for val in f:
+            if (val<crit_val):
+                p.append(-1)
+            else:
+                p.append(1)
+        p = np.array(p)
+        return p
+
+
+
+    def shuffle_data(self, pd):
+
+        xtemp = pd[0]
+        ytemp = pd[1].reshape((pd[1].shape[0],1))
+
+        temp = np.concatenate((xtemp, ytemp), axis=1)
+
+        np.random.shuffle(temp)
+
+        ynew = temp[:,-1:]
+        ynew = np.array(ynew)
+        ynew = ynew.astype(np.float64)
+        xnew = temp[:,:-1]
+        xnew = np.array(xnew)
+        xnew = xnew.astype(np.float64)
+
+        p = [xnew, ynew.reshape(ynew.shape[0])]
+
+        return p
+
+
+    def make_batches(self, pd, batch_size):
+        containers = int(np.floor((pd[0].shape[0]) / batch_size))
+        remaining = ((pd[0].shape[0]) % batch_size)
+        batch = []
+        for i in range (0,containers):
+            batch_x = pd[0][i*batch_size:((i+1)*batch_size),:]
+            batch_y = pd[1][i*batch_size:((i+1)*batch_size)]
+            batch.append([batch_x, batch_y])
+        if (remaining):
+            batch_x = pd[0][(i+1)*batch_size:(i+1)*batch_size+remaining,:]
+            batch_y = pd[1][(i+1)*batch_size:(i+1)*batch_size+remaining]
+            batch.append([batch_x, batch_y])
+        return batch
+
+
+    def fit(self, Y_true, X, learn_rate, max_iters, batch_size=16, shuffle=True):
+        """ train model with input dataset using gradient descent.
+        Args:
+            Y_true(numpy.ndarray): dataset labels with a dimension of (# of samples,)
+            X(numpy.ndarray): input dataset with a dimension of (# of samples, ndims+1)
+            learn_rate: learning rate for gradient descent
+            max_iters: maximal number of iterations
+            ......: append as many arguments as you want
+        """
+        ###############################################################
+        # Fill your code in this function
+        ###############################################################
+        # processed_dataset = [X, Y_true]
+
+        # if (shuffle):
+        #     data = self.shuffle_data(processed_dataset)
+        # else:
+        #     data = processed_dataset
+
+        # batch = self.make_batches(data, batch_size)
+
+        # total_batches = int(np.ceil(data[0].shape[0] / batch_size))
+        # epoch = 1
+        # batch_in_progress = 0
+
+        # for i in range(max_iters):
+        #     x_batch = batch[batch_in_progress][0]
+        #     y_batch = batch[batch_in_progress][1].reshape((batch[batch_in_progress][1].shape[0],1))
+
+        #     # update_step(x_batch,y_batch,model,learning_rate)
+        #     self.W = self.W - learn_rate*self.backward(y_batch,x_batch)
+
+        #     batch_in_progress += 1
+
+        #     if (batch_in_progress == total_batches):
+        #         if (shuffle):
+        #             data = self.shuffle_data(processed_dataset)
+        #             batch = self.make_batches(data, batch_size)
+
+        #         epoch += 1
+        #         batch_in_progress = 0
+        for i in range(max_iters):
+            gradient = self.backward(Y_true,X)
+            self.W = self.W - learn_rate*gradient
+
+
+

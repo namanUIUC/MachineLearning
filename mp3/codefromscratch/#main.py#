@@ -1,0 +1,68 @@
+"""Main function for binary classifier"""
+
+import numpy as np
+
+from io_tools import *
+from logistic_model import *
+from sklearn.metrics import confusion_matrix
+""" Hyperparameter for Training """
+learn_rate = 0.01
+max_iters = 100
+
+if __name__ == '__main__':
+    ###############################################################
+    # Fill your code in this function to learn the general flow
+    # (..., although this funciton will not be graded)
+    ###############################################################
+
+    # Load dataset.
+    # Hint: A, T = read_dataset('../data/trainset','indexing.txt')
+    A, T = read_dataset('../data/trainset','indexing.txt')
+
+    #x_train, x_test, y_train, y_test = train_test_split(A, T, test_size=0.2)
+
+    # Initialize model.
+    ndim = A.shape[1]
+    model = LogisticModel(ndim, 'zeros')
+
+    # x_train = A[:1000,:]
+    # x_test = A[1000:,:]
+    # y_train = T[:1000]
+    # y_test = T[1000:]
+
+    #print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)
+
+    # Train model via gradient descent.
+    model.fit(T, A, learn_rate, max_iters)
+
+    # Save trained model to 'trained_weights.np'
+    model.save_model('trained_weights.np')
+
+    # Load trained model from 'trained_weights.np'
+    model.load_model('trained_weights.np')
+    
+
+    # Try all other methods: forward, backward, classify, compute accuracy
+    y_predict = model.classify(A)
+    #print(y_predict)
+
+    # true_p = 0
+    # true_n = 0
+    # false_p = 0
+    # false_n = 0
+    # for i in range(y_predict.shape[0]):
+    #     if (y_predict[i] == -1 and y_test[i] == -1):
+    #         true_n +=1
+    #     elif(y_predict[i] == 1 and y_test[i] == 1):
+    #         true_p +=1
+    #     elif(y_predict[i] == -1 and y_test[i] == 1):
+    #         false_n +=1
+    #     else:
+    #         false_p +=1
+    # print(i)
+    # print(true_p,true_p,false_p,false_n)
+    # print((true_p+true_n)/(true_p+true_p+false_p+false_n))
+    print(confusion_matrix(T, y_predict))
+
+
+
