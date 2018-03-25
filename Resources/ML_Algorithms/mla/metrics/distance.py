@@ -11,5 +11,13 @@ def euclidean_distance(a, b):
 
 
 def l2_distance(X):
+    '''
+    [<------x0----->]
+    [<------x1----->]
+    [<------x2----->]
+    .
+    .
+    .
+    '''
     sum_X = np.sum(X * X, axis=1)
     return (-2 * np.dot(X, X.T) + sum_X).T + sum_X
