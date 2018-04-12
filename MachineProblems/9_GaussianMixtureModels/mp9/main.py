@@ -31,7 +31,7 @@ def main(_):
                                  max_iter=FLAGS.max_iter)
 
     # Unsupervised training.
-   # model.fit(unlabeled_data)
+    # model.fit(unlabeled_data)
 
     # Supervised training.
     train_label, train_data = io_tools.read_dataset('data/simple_test.csv')

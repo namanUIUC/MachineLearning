@@ -53,7 +53,7 @@ class GaussianMixtureModel(object):
             # E Step
             z_ik = self._e_step(x)
 
-            #M Step
+            # M Step
             self._m_step(x, z_ik)
 
     def _e_step(self, x):
@@ -86,6 +86,7 @@ class GaussianMixtureModel(object):
 
         # Updating pi
         self._pi = z_k / x.shape[0]
+        self._pi = self._pi / np.sum(self._pi)
 
         # Updating mu
         num = np.matmul(np.transpose(z_ik), x)
@@ -101,7 +102,6 @@ class GaussianMixtureModel(object):
             for i in range(self._n_dims):
                 temp[k, i, i] += self._reg_covar
         self._sigma = temp
-
 
     def get_conditional(self, x):
         """Computes the conditional probability.
@@ -166,7 +166,6 @@ class GaussianMixtureModel(object):
 
         # Calculate basian matrix
         z_ik = np.transpose(np.transpose(numerator) / marginals)
-
 
         return z_ik
 
