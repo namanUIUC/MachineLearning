@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from models.gan import Gan
 import time
+import datetime
 
 
 def image_save(model, path='GAN.png'):
@@ -43,10 +44,13 @@ def train(model, mnist_dataset, learning_rate=0.001, batch_size=16,
     g_iters = 1
 
     # Iterations for discriminator
-    d_iters = 2
+    d_iters = 1
 
     print('Batch Size: %d, Total epoch: %d, Learning Rate : %f' %
           (batch_size, num_steps, learning_rate))
+
+    filename = "./summary_log/run" + datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%s")
+    writer = tf.summary.FileWriter(filename, model.session.graph)
 
     print('Start training ...')
     tic = time.time()
@@ -66,11 +70,12 @@ def train(model, mnist_dataset, learning_rate=0.001, batch_size=16,
 
         batch_z = np.random.uniform(-1, 1, [batch_size, 10])
         for train_generator in range(g_iters):
-            _, g_loss = model.session.run(
-                [model.g_optimizer, model.g_loss],
+            _, g_loss, sum_out = model.session.run(
+                [model.g_optimizer, model.g_loss, model.mergedSummary],
                 feed_dict={model.z_placeholder: batch_z,
                            model.learning_rate_placeholder: learning_rate}
             )
+        writer.add_summary(sum_out, epoch)
         if (epoch + 1) % 500 == 0:
             toc = time.time() - tic
             tic = time.time()

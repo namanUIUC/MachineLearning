@@ -58,6 +58,13 @@ class Gan(object):
         self.session = tf.InteractiveSession()
         self.session.run(tf.global_variables_initializer())
 
+        # Summary
+        # tf.summary.histogram(name='variables_d', values=d_var)
+        # tf.summary.histogram(name='variables_g', values=g_var)
+        # tf.summary.scalar("loss_d", self.d_loss)
+        tf.summary.scalar("loss_g", self.g_loss)
+        self.mergedSummary = tf.summary.merge_all()
+
     def _discriminator(self, x, reuse=False):
         """Discriminator block of the network.
 
