@@ -157,3 +157,5 @@ class Gan(object):
 ```
 
 save this in a folder `models/gan.py` 
+
+Now
