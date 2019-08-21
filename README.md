@@ -1,5 +1,5 @@
 # MACHINE LEARNING
-[![HitCount](http://hits.dwyl.io/namanUIUC/https://githubcom/namanUIUC/MachineLearning.svg)](http://hits.dwyl.io/namanUIUC/https://githubcom/namanUIUC/MachineLearning)
+
 [![star this repo](http://githubbadges.com/star.svg?user=namanUIUC&repo=https://github.com/namanUIUC/MachineLearning&style=default)](https://github.com/namanUIUC/https://github.com/namanUIUC/MachineLearning)
 [![fork this repo](http://githubbadges.com/fork.svg?user=namanUIUC&repo=https://github.com/namanUIUC/MachineLearning&style=default)](https://github.com/namanUIUC/https://github.com/namanUIUC/MachineLearning/fork)
 
