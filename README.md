@@ -1,7 +1,7 @@
 # MACHINE LEARNING
 
-[![star this repo](http://githubbadges.com/star.svg?user=namanUIUC&repo=https://github.com/namanUIUC/MachineLearning&style=default)](https://github.com/namanUIUC/https://github.com/namanUIUC/MachineLearning)
-[![fork this repo](http://githubbadges.com/fork.svg?user=namanUIUC&repo=https://github.com/namanUIUC/MachineLearning&style=default)](https://github.com/namanUIUC/https://github.com/namanUIUC/MachineLearning/fork)
+<!-- Place this tag where you want the button to render. -->
+<a class="github-button" href="https://github.com/namanUIUC/MachineLearning" aria-label="Star namanUIUC/MachineLearning on GitHub">Star</a>
 
 
 This project contains simple and naive machine learning techniques. The lecture slides and assignments are from [CS446 UIUC Spring 2018](https://courses.engr.illinois.edu/cs446/sp2018/_site/).
