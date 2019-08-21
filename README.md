@@ -1,4 +1,6 @@
 # MACHINE LEARNING
+[![HitCount](http://hits.dwyl.io/namanUIUC/https://githubcom/namanUIUC/MachineLearning.svg)](http://hits.dwyl.io/namanUIUC/https://githubcom/namanUIUC/MachineLearning)
+
 
 This project contains simple and naive machine learning techniques. The lecture slides and assignments are from [CS446 UIUC Spring 2018](https://courses.engr.illinois.edu/cs446/sp2018/_site/).
 
