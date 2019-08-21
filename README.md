@@ -1,7 +1,6 @@
 # MACHINE LEARNING
 
-<!-- Place this tag where you want the button to render. -->
-<a class="github-button" href="https://github.com/namanUIUC/MachineLearning" aria-label="Star namanUIUC/MachineLearning on GitHub">Star</a>
+[![HitCount](http://hits.dwyl.io/namanUIUC/https://githubcom/namanUIUC/MachineLearning.svg)](http://hits.dwyl.io/namanUIUC/https://githubcom/namanUIUC/MachineLearning)
 
 
 This project contains simple and naive machine learning techniques. The lecture slides and assignments are from [CS446 UIUC Spring 2018](https://courses.engr.illinois.edu/cs446/sp2018/_site/).
